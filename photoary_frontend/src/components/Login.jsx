@@ -3,21 +3,37 @@ import { useNavigate } from 'react-router-dom';
 import GoogleLogin from 'react-google-login';
 import { FcGoogle } from 'react-icons/fc';
 import shareVideo from '../assets/share.mp4';
+import { client } from '../client';
 import logo from '../assets/logowhite.png';
 
 const Login = () => {
 
-    const responseGoogle =()=>{
+    const navigate = useNavigate();
 
+    const responseGoogle = (response) => {
+        localStorage.setItem('user', JSON.stringify(response.profileObj));
+        const { name, imageUrl, googleId } = response.profileObj;
+
+        const doc = {
+            _id: googleId,
+            _type: 'user',
+            userName: name,
+            image: imageUrl
+        }
+
+        client.createIfNotExists(doc)
+            .then(() => {
+                navigate('/', { replace: true })
+            })
     }
-    
+
     return (
         <div className="flex justify-start items-center flex-col h-screen">
 
             <div className="relative w-full h-full">
                 <video src={shareVideo}
                     type="video/mp4"
-                    Loop
+                    loop
                     controls={false}
                     muted
                     autoPlay
@@ -32,7 +48,7 @@ const Login = () => {
 
                     <div className="shadow-2x1">
                         <GoogleLogin
-                            clientId=""
+                            clientId={process.env.REACT_APP_GOOGLE_API_TOKEN}
                             render={(renderProps) => (
                                 <button type="button"
                                     className="bg-mainColor flex justify-center items-center p-3 rounded-lg cursor-pointer outline-none"
