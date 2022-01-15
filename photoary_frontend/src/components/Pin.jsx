@@ -17,7 +17,7 @@ const Pin = ({ pin: { image, postedBy, _id, destination, save } }) => {
 
     const user = fetchUser();
 
-    const alreadySaved = !!(save?.filter((item) => item.postedBy._id === user.googleId))?.length;
+    const alreadySaved = !!(save?.filter((item) => item.postedBy?._id === user?.googleId))?.length;
 
     const savePin = (id) => {
         if (!alreadySaved) {
@@ -27,10 +27,10 @@ const Pin = ({ pin: { image, postedBy, _id, destination, save } }) => {
                 .setIfMissing({ save: [] })
                 .insert('after', 'save[-1]', [{
                     _key: uuidv4(),
-                    userId: user.googleId,
+                    userId: user?.googleId,
                     postedBy: {
                         _type: 'postedBy',
-                        _ref: user.googleId
+                        _ref: user?.googleId
                     }
                 }])
                 .commit()
@@ -111,7 +111,7 @@ const Pin = ({ pin: { image, postedBy, _id, destination, save } }) => {
                                 </a>
                             )}
 
-                            {postedBy?._id === user.googleId && (
+                            {postedBy?._id === user?.googleId && (
                                 <button
                                     type="button"
                                     className="bg-white p-2 flex flex-row justify-center items-center opacity-70 hover:opacity-100 fpnt-bold text-dark text-base rounded-3xl hover:shadow-md outlined-none"
@@ -128,7 +128,7 @@ const Pin = ({ pin: { image, postedBy, _id, destination, save } }) => {
                 )}
             </div>
             <Link
-                to={`user-profile/${postedBy?._id}`}
+                to={`/user-profile/${postedBy?._id}`}
                 className="flex gap-2 mt-2 items-center"
             >
                 <img src={postedBy?.image} alt="user-profile" className="w-8 h-8 rounded-full object-cover" />
