@@ -19,3 +19,8 @@ Then Need to open <i> https://console.cloud.google.com </i> and create a project
 
 I used netlify to deploy the application. Creat a new account or login. Then
 use <b> npm run build</b> to create production build of <i><b> photoary_frontend</b> </i>. then drag the build folder to netlify and can chage the domain app name. Also have to updated new address in cross origin both in sanity manager and google api certificate.
+
+
+## Example
+
+https://photoary.netlify.app/
